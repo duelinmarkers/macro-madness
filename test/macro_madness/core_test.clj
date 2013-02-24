@@ -1,6 +1,10 @@
 (ns macro-madness.core-test
   (:use clojure.test macro-madness.core))
 
+(use-fixtures :each
+  (fn [f] (binding [*ns* (the-ns 'macro-madness.core-test)] ;; Makes macroexpand tests work.
+           (f))))
+
 (deftest simple-defmap-macros
 
   (def expected-map {:k1 "one" :k2 "two"})
@@ -8,20 +12,17 @@
   (testing "defmap0"
     (defmap0 my-map0 :k1 "one" :k2 "two")
     (is (= my-map0 expected-map))
-    (comment ; due to clojure.test bug
-      (is (= (macroexpand '(defmap0 foo :a "Aye")) '(def foo (hash-map :a "Aye"))))))
+    (is (= (macroexpand '(defmap0 foo :a "Aye")) '(def foo (hash-map :a "Aye")))))
 
   (testing "defmap"
     (defmap my-map :k1 "one" :k2 "two")
     (is (= my-map expected-map))
-    (comment
-      (is (= (macroexpand '(defmap foo :a "Aye")) '(def foo {:a "Aye"})))))
+    (is (= (macroexpand '(defmap foo :a "Aye")) '(def foo {:a "Aye"}))))
 
   (testing "defmap2"
     (defmap2 my-map2 :k1 "one" :k2 "two")
     (is (= my-map2 expected-map))
-    (comment
-      (is (= (macroexpand '(defmap2 foo :a "Aye")) '(def foo (clojure.core/hash-map :a "Aye")))))))
+    (is (= (macroexpand '(defmap2 foo :a "Aye")) '(def foo (clojure.core/hash-map :a "Aye"))))))
 
 (deftest try-times-macro-and-fn
 
