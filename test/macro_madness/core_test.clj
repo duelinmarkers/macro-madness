@@ -1,9 +1,7 @@
 (ns macro-madness.core-test
   (:use clojure.test macro-madness.core))
 
-(use-fixtures :each
-  (fn [f] (binding [*ns* (the-ns 'macro-madness.core-test)] ;; Makes macroexpand tests work.
-           (f))))
+(use-fixtures :each (fn [f] (binding [*ns* (the-ns 'macro-madness.core-test)] (f)))) ;; Makes macroexpand tests work.
 
 (deftest simple-defmap-macros
 
