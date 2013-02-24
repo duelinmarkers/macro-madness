@@ -12,7 +12,7 @@
   (testing "defmap0"
     (defmap0 my-map0 :k1 "one" :k2 "two")
     (is (= my-map0 expected-map))
-    (is (= (macroexpand '(defmap0 foo :a "Aye")) '(def foo (hash-map :a "Aye")))))
+    (is (= (macroexpand '(defmap0 foo :a "Aye")) '(def foo (clojure.core/hash-map :a "Aye")))))
 
   (testing "defmap"
     (defmap my-map :k1 "one" :k2 "two")

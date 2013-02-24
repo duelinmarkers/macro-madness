@@ -6,7 +6,7 @@
 (defmacro defmap0
   "Defines a map, implemented with quote and nothing else."
   [name & kvs]
-  (list 'def name (cons 'hash-map kvs)))
+  (list 'def name (cons 'clojure.core/hash-map kvs)))
 
 (defmacro defmap
   "Defines a map, implemented with syntax-quote and unquote."
