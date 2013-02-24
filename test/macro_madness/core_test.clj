@@ -10,17 +10,17 @@
   (testing "defmap0"
     (defmap0 my-map0 :k1 "one" :k2 "two")
     (is (= my-map0 expected-map))
-    (is (= (macroexpand '(defmap0 foo :a "Aye")) '(def foo (clojure.core/hash-map :a "Aye")))))
+    (is (= '(def foo (clojure.core/hash-map :a "Aye")) (macroexpand '(defmap0 foo :a "Aye")))))
 
   (testing "defmap"
     (defmap my-map :k1 "one" :k2 "two")
     (is (= my-map expected-map))
-    (is (= (macroexpand '(defmap foo :a "Aye")) '(def foo {:a "Aye"}))))
+    (is (= '(def foo {:a "Aye"}) (macroexpand '(defmap foo :a "Aye")))))
 
   (testing "defmap2"
     (defmap2 my-map2 :k1 "one" :k2 "two")
     (is (= my-map2 expected-map))
-    (is (= (macroexpand '(defmap2 foo :a "Aye")) '(def foo (clojure.core/hash-map :a "Aye"))))))
+    (is (= '(def foo (clojure.core/hash-map :a "Aye")) (macroexpand '(defmap2 foo :a "Aye"))))))
 
 (deftest try-times-macro-and-fn
 
