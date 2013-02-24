@@ -110,7 +110,7 @@
         [options & methods] (if (map? (first args))
                               args
                               (cons {} args))]
-    (apply list 'do
-           (apply list `defmulti name dispatch-fn (flatten (seq options)))
-           (for [method methods]
-             (apply list `defmethod name method)))))
+    `(do
+       (defmulti ~name ~dispatch-fn ~@(flatten (seq options)))
+       ~@(for [method methods]
+           `(defmethod name ~@method)))))
