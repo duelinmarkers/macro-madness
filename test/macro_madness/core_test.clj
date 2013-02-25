@@ -36,7 +36,6 @@
       (is (= 3 @attempts))
       (is (= "on attempt 3" (.getMessage caught))))
 
-
     (let [attempts (atom 0)
           caught (try
                    (try-times* 3 #(inc-and-throw attempts))
