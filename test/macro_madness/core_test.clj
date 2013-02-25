@@ -58,3 +58,27 @@
           (try-twice (inc-and-throw attempts))
           (catch RuntimeException e nil))
         (is (= 2 @attempts))))))
+
+(deftest defmultimethod-macro
+  (comment  (defmultimethod minimal-args-mm :type
+              (:a [arg] (str "Type A " (:msg arg)))
+              (:default [arg] (str "Default " (:msg arg))))
+            (is (= "Type A hello" (minimal-args-mm {:type :a :msg "hello"})))
+            (is (= "Default hello" (minimal-args-mm {:type :b :msg "hello"}))))
+
+  (defmultimethod maximal-args-mm
+    "The documentation."
+    {:meta "data"}
+    :type
+    {:default :oops}
+    (:oops [arg] (str "defaulted " (:msg arg)))
+    (:a [arg] (str "Type A " (:msg arg))))
+  (is (= "Type A hello" (maximal-args-mm {:type :a :msg "hello"})))
+  (is (= "defaulted hello" (maximal-args-mm {:type :b :msg "hello"})))
+  (is (= "data" (:meta (meta #'maximal-args-mm))))
+
+  (defmultimethod attr-map-mm {:foo "bar"} :type)
+  (is (= "bar" (:foo (meta #'attr-map-mm))))
+
+  (defmultimethod documented-mm "does stuff" :type)
+  (is (= "does stuff" (:doc (meta #'documented-mm)))))
