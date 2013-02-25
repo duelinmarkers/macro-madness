@@ -105,12 +105,12 @@
       (\"my-weird-default\" [_ _] (println \"we've defaulted!\"))
       (dispatch-val-1 [x y] (println x y)))"
   {:arglists '([name doc-string? attr-map? dispatch-fn options-map? & methods])}
-  [name & args]
-  (let [[name [dispatch-fn & args]] (clojure.tools.macro/name-with-attributes name args)
+  [nm & args]
+  (let [[nm [dispatch-fn & args]] (clojure.tools.macro/name-with-attributes nm args)
         [options & methods] (if (map? (first args))
                               args
                               (cons {} args))]
     `(do
-       (defmulti ~name ~dispatch-fn ~@(flatten (seq options)))
+       (defmulti ~nm ~dispatch-fn ~@(flatten (seq options)))
        ~@(for [method methods]
-           `(defmethod name ~@method)))))
+           `(defmethod ~nm ~@method)))))
