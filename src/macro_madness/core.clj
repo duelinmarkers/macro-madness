@@ -3,32 +3,13 @@
 
 (comment
 
-
-
-
-
-
-
-
-
-
-
-
   Macro Madness
-
-  John Hume : @duelinmarkers
-
+  John Hume - @duelinmarkers
   Austin Clojure Meetup, March 4, 2013
-  http://www.meetup.com/Austin-Clojure-Meetup/
+  ; http://www.meetup.com/Austin-Clojure-Meetup/
 
 
-
-
-
-
-
-
-
+---
 
 
 
@@ -36,28 +17,23 @@
 
 
 
-
-
-
-
+---
 
 
 
   Much of Clojure's API is made up of macros,
-  including some VERY core stuff: (and or when for doto)
+  including some VERY core stuff -> (and or when for doto)
 
   (doseq [row (->> 'clojure.core ns-publics vals (map meta) (filter :macro) (map :name) sort (partition 10))]
     (apply println row))
 
-  Many of those you could have created yourself (if Rich hadn't):
+  Many of those you could have created yourself (if Rich hadn't)
    (and comment declare defn defn- defonce doto for if-let if-not
    letfn memfn or when when-first when-let when-not while with-open)
 
 
 
-
-
-
+---
 
 
 
@@ -68,12 +44,7 @@
 
 
 
-
-
-
-
-
-
+---
 
 
 
@@ -83,12 +54,12 @@
     * Can't be composed like fns
     * Sometimes hard to reason about
     * Compile-time execution makes extension difficult
-      Example: 'localize' multimethod in expectations)
-
-  )
+      Example-> 'localize' multimethod in expectations)
 
 
 
+---
+)
 
 
 
