@@ -1,6 +1,100 @@
 (ns macro-madness.core
   (:require clojure.tools.macro))
 
+(comment
+
+
+
+
+
+
+
+
+
+
+
+
+  Macro Madness
+
+  John Hume : @duelinmarkers
+
+  Austin Clojure Meetup, March 4, 2013
+  http://www.meetup.com/Austin-Clojure-Meetup/
+
+
+
+
+
+
+
+
+
+
+
+
+  MACROS are functions that transform code forms into other code forms.
+
+
+
+
+
+
+
+
+
+
+  Much of Clojure's API is made up of macros,
+  including some VERY core stuff: (and or when for doto)
+
+  (doseq [row (->> 'clojure.core ns-publics vals (map meta) (filter :macro) (map :name) sort (partition 10))]
+    (apply println row))
+
+  Many of those you could have created yourself (if Rich hadn't):
+   (and comment declare defn defn- defonce doto for if-let if-not
+   letfn memfn or when when-first when-let when-not while with-open)
+
+
+
+
+
+
+
+
+
+  "Variables abstract over values,
+   functions abstract over behavior,
+   macros abstract over syntax."
+    -- Joe Marshall, 23 Mar 2004, comp.lang.lisp
+
+
+
+
+
+
+
+
+
+
+
+
+  (Pros
+    * Create custom (lisp-friendly) syntax with controlled evaluation.)
+  (Cons
+    * Can't be composed like fns
+    * Sometimes hard to reason about
+    * Compile-time execution makes extension difficult
+      Example: 'localize' multimethod in expectations)
+
+  )
+
+
+
+
+
+
+
+
+
 ;; Simple macros.
 
 (defmacro defmap0
@@ -8,10 +102,24 @@
   [name & kvs]
   (list 'def name (cons 'clojure.core/hash-map kvs)))
 
+
+
+
+
+
+
+
 (defmacro defmap
   "Defines a map, implemented with syntax-quote and unquote."
   [name & {:as kvs}]
   `(def ~name ~kvs))
+
+
+
+
+
+
+
 
 (defmacro defmap2
   "Defines a map, implemented with syntax-quote and unquote-splicing."
@@ -19,18 +127,32 @@
   `(def ~name (hash-map ~@kvs)))
 
 
+
+
+
+
+
+
+
+
+
 ;; Slightly less simple, with some common techniques.
 
 (defmacro defenum [& syms]
   ;; Wrap a (do ...) around multiple independent expressions.
   `(do
-     ;; Prefix code that returns a seq of forms with ~@
+     ;; Unquote-splice code that returns a seq of forms
      ~@(for [sym syms]
          `(def ~sym ~(name sym)))
      ;; Litter the callee's namespace with new vars or capture its
      ;; vars with ~' -- but only if you're sure you want to.
      (def ~'values [~@syms])
      (def ~'length ~(count syms))))
+
+
+
+
+
 
 
 ;; Common technique: Convert a body into a fn and use an underlying HOF.
@@ -55,7 +177,18 @@
   the call chain."
   [n & body]
   `(try-times* ~n (fn [] ~@body)))
+
 ;; Example from Meikel Brandmeyer (kotarak) at http://stackoverflow.com/a/1879961/117989
+
+
+
+
+
+
+
+
+
+
 
 
 ;; What's defmacro really doing?
@@ -73,6 +206,8 @@
          (seq (concat (list (quote def)) (list name) (list kvs)))))
     (. (var defmap) (setMacro))
     (var defmap)))
+
+
 
 (defmacro dump-macro-goodness
   "Prints what it knows at compile time. Expands to nothing."
